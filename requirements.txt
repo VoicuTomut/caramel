@@ -1,0 +1,5 @@
+
+pyzx
+opt-einsum
+kahypar
+matplotlib
