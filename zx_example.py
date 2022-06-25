@@ -1,5 +1,4 @@
 
-
 import opt_einsum
 from cotengra import ContractionTree
 import numpy as np
@@ -15,13 +14,13 @@ optimizer = MansikkaOptimizer()
 eq, shapes = opt_einsum.helpers.rand_equation(10, 3, seed=42)
 arrays = list(map(np.ones, shapes))
 path, path_info = opt_einsum.contract_path(eq, *arrays, optimize=optimizer)
-print("opt_einsum_path:",path)
-print("opt_einsum_path_info:",path_info.speedup)
+print("opt_einsum_path:", path)
+print("opt_einsum_path_info:", path_info.speedup)
 
 
 circuit_path = "circuit_dataset/zx_circuits/000_test_circuit.qasm"
 tensor_circuit = zx.Circuit.load(circuit_path)
-zx_graph=tensor_circuit.to_graph()
+zx_graph =tensor_circuit.to_graph()
 
 
 quantum_net = Network(zx_graph)
@@ -42,4 +41,3 @@ print(
     " log2[WRITE]: ",
     "%.3f" % np.log2(tree.total_write()),
 )
-

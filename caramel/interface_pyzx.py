@@ -1,6 +1,7 @@
 """
 
 """
+import numpy as np
 
 
 class Network:
@@ -69,16 +70,6 @@ class Network:
         inputs = zx_graph.inputs()
         outputs = zx_graph.outputs()
 
-        # inp = []
-        # for circ_node in self.get_node_collection(zx_graph).keys():
-        #     if circ_node not in inputs:
-        #         if circ_node not in outputs:
-        #             inp.append(self.node_collection[circ_node]["edges"])
-        #
-        # size_dic = {}
-        # for i in range(len(inp)):
-        #     size_dic[i] = len(inp[i])
-
         inp = []
         for circ_node in self.get_node_collection(zx_graph).keys():
             if circ_node not in inputs:
@@ -94,6 +85,25 @@ class Network:
                     size_dic[edge] = 1
 
         return size_dic
+
+    def adjacent_matrix(self):
+
+        abj_mat = np.zeros((len(self.opt_einsum_input),len(self.opt_einsum_input)))
+        for i, node_i in enumerate(self.opt_einsum_input):
+            for j, node_j in enumerate(self.opt_einsum_input):
+                if len(node_i.intersection(node_j)) != 0 and i != j:
+                    abj_mat[i][j] = 1
+                    abj_mat[j][i] = 1
+        return abj_mat
+
+    def adjacent_matrix_enhanced(self):
+        abj_mat = self.adjacent_matrix()
+
+        for j, edge in enumerate(self.opt_einsum_output):
+            for i, node_i in enumerate(self.opt_einsum_input):
+                if edge in node_i:
+                    abj_mat[i][i] = j
+        return abj_mat
 
 
 def get_tensor():
