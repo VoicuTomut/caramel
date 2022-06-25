@@ -91,9 +91,10 @@ class Network:
         abj_mat = np.zeros((len(self.opt_einsum_input),len(self.opt_einsum_input)))
         for i, node_i in enumerate(self.opt_einsum_input):
             for j, node_j in enumerate(self.opt_einsum_input):
-                if len(node_i.intersection(node_j)) != 0 and i != j:
-                    abj_mat[i][j] = 1
-                    abj_mat[j][i] = 1
+                intersect = node_i.intersection(node_j)
+                if len(intersect) != 0 and i != j:
+                    abj_mat[i][j] = 1#next(iter(intersect), None)
+                    abj_mat[j][i] = abj_mat[i][j]
         return abj_mat
 
     def adjacent_matrix_enhanced(self):

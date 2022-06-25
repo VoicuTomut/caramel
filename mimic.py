@@ -3,7 +3,7 @@ import pyzx as zx
 
 from caramel.interface_pyzx import Network
 from caramel.optimizer_mansikka import MansikkaOptimizer
-
+from caramel.utils import *
 
 circuit_path = "circuit_dataset/zx_circuits/000_test_circuit.qasm"
 tensor_circuit = zx.Circuit.load(circuit_path)
@@ -21,7 +21,8 @@ contraction_order = optimizer(quantum_net.opt_einsum_input,
 print("\n Output:\n Contraction order:\n", contraction_order)
 
 # Contraction order rules :
+# size: len(quantum_net.opt_einsum_input)-1
+# possible value: [ ...(<i, <=i),...]
 #
-#
-#
-#
+
+
