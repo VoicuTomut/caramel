@@ -10,6 +10,7 @@ tensor_circuit = zx.Circuit.load(circuit_path)
 zx_graph = tensor_circuit.to_graph()
 
 quantum_net = Network(zx_graph)
+quantum_net.print_net()
 abj_mat = quantum_net.adjacent_matrix_enhanced()
 print("\n Input:\n Circuit abj mat enhanced:\n", abj_mat)
 

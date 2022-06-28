@@ -10,12 +10,14 @@ class Network:
         self.opt_einsum_output = self.get_output(zx_graph)
         self.opt_einsum_input = self.get_input(zx_graph)
         self.size_dict = self.get_size_dic(zx_graph)
+        self.coo_mat=self.coo_matrix()
 
     def print_net(self):
         print("\n node_collection:", self.node_collection)
         print("\n input:", self.opt_einsum_input)
         print("\n output:", self.opt_einsum_output)
         print("\n size_dic:", self.size_dict)
+        print("\n coo_mat:", self.coo_mat)
 
     def get_node_collection(self, zx_graph):
         nodes = zx_graph.vertices()
@@ -80,7 +82,7 @@ class Network:
         for node_edges in inp:
             for edge in node_edges:
                 if edge in size_dic.keys():
-                    size_dic[edge] = size_dic[edge]
+                    size_dic[edge] = size_dic[edge]+1
                 else:
                     size_dic[edge] = 1
 
@@ -88,12 +90,12 @@ class Network:
 
     def adjacent_matrix(self):
 
-        abj_mat = np.zeros((len(self.opt_einsum_input),len(self.opt_einsum_input)))
+        abj_mat = np.zeros((len(self.opt_einsum_input), len(self.opt_einsum_input)))
         for i, node_i in enumerate(self.opt_einsum_input):
             for j, node_j in enumerate(self.opt_einsum_input):
                 intersect = node_i.intersection(node_j)
                 if len(intersect) != 0 and i != j:
-                    abj_mat[i][j] = 1#next(iter(intersect), None)
+                    abj_mat[i][j] = 1  # next(iter(intersect), None)
                     abj_mat[j][i] = abj_mat[i][j]
         return abj_mat
 
@@ -105,6 +107,20 @@ class Network:
                 if edge in node_i:
                     abj_mat[i][i] = j
         return abj_mat
+
+    def coo_matrix(self):
+        coo_mat = [[0 for i in range(len(self.size_dict))],
+                   [0 for i in range(len(self.size_dict))]]
+        for edge in self.size_dict.keys():
+            k = 0
+            for i, node_i in enumerate(self.opt_einsum_input):
+                if edge in node_i:
+                    coo_mat[k][edge] = i
+                    k = k + 1
+            if k == 1:
+                coo_mat[1][edge] = coo_mat[0][edge]
+
+        return coo_mat
 
 
 def get_tensor():
