@@ -11,7 +11,7 @@ from caramel.optimizer_mansikka import MansikkaOptimizer
 
 
 class CircuitDataset(Dataset):
-    def __init__(self, root,target_files=None , test = False, transform=None, pre_transform=None, pre_filter=None):
+    def __init__(self, root, target_files=None, test=False, transform=None, pre_transform=None, pre_filter=None):
         """
 
         :param root: Where the data set should be stored. This folder is split in raw_dir and processed_dir
@@ -42,9 +42,9 @@ class CircuitDataset(Dataset):
         :return:
         """
         processed_file_names = []
-        for file in tf:
-            if file[-2]==".":
-                processed_file_names.append(file[::-2]+".pc")
+        for file in self.tf:
+            if file[-2] == ".":
+                processed_file_names.append(file[::-2] + ".pc")
             else:
                 processed_file_names.append(file[::-2] + ".pc")
 
@@ -52,7 +52,7 @@ class CircuitDataset(Dataset):
 
     def process(self):
 
-        for raw_path in tqdm(self.raw_paths, total =len(self.raw_paths)):
+        for raw_path in tqdm(self.raw_paths, total=len(self.raw_paths)):
             tensor_circuit = zx.Circuit.load(raw_path)
             zx_graph = tensor_circuit.to_graph()
             quantum_net = Network(zx_graph)
@@ -154,15 +154,23 @@ class CircuitDataset(Dataset):
         return len(self.processed_file_names)
 
     def get(self, idx):
-        data = torch.load(os.path.join(self.processed_dir, f'data_{idx}.pt'))
+        data = torch.load(os.path.join(self.processed_dir, f'{self.tf[idx]}.pt'))
         return data
-"""
+
 
 """
-tf= [ 'tof_10_after_heavy', 'tof_10_after_light', 'tof_10_before',
-    'tof_10_pyzx.qc', 'tof_10_tpar.qc', 'tof_3_after_heavy', 'tof_3_after_light',
-    'tof_3_before', 'tof_3_pyzx.qc', 'tof_3_tpar.qc',  'tof_4_after_heavy', 'tof_4_after_light',
-    'tof_4_before', 'tof_4_pyzx.qc', 'tof_4_tpar.qc',  'tof_5_after_heavy', 'tof_5_after_light',
-    'tof_5_before', 'tof_5_pyzx.qc',]
+tf = ['tof_10_after_heavy', 'tof_10_after_light', 'tof_10_before',
+      'tof_10_pyzx.qc', 'tof_10_tpar.qc', 'tof_3_after_heavy', 'tof_3_after_light',
+      'tof_3_before', 'tof_3_pyzx.qc', 'tof_3_tpar.qc', 'tof_4_after_heavy', 'tof_4_after_light',
+      'tof_4_before', 'tof_4_pyzx.qc', 'tof_4_tpar.qc', 'tof_5_after_heavy', 'tof_5_after_light',
+      'tof_5_before', 'tof_5_pyzx.qc', ]
 
-dataset = CircuitDataset(root = 'C:/Users/tomut/Documents/GitHub/caramel/circuit_dataset/experiment_dataset/',target_files=tf)
+dataset = CircuitDataset(root='C:/Users/tomut/Documents/GitHub/caramel/circuit_dataset/experiment_dataset/',
+                         target_files=tf)
+
+idx = 6
+print("edge_index:\n", dataset[6].edge_index)
+print("node_atr:\n", dataset[6].x)
+print("edge_atr:\n", dataset[6].edge_attr)
+print("order\n", dataset[6].y)
+"""
