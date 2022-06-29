@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pyzx as zx
 
@@ -27,3 +28,17 @@ print("\n Output:\n Contraction order:\n", contraction_order)
 #
 
 
+
+
+# folder path
+dir_path = r'C:\Users\tomut\Documents\GitHub\caramel\circuit_dataset\experiment_dataset\raw_dir'
+
+# list to store files
+res = []
+
+# Iterate directory
+for path in os.listdir(dir_path):
+    # check if current path is a file
+    if os.path.isfile(os.path.join(dir_path, path)):
+        res.append(path)
+print(res)
