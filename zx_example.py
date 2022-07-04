@@ -21,6 +21,8 @@ optimizer = MansikkaOptimizer()
 circuit_path = "circuit_dataset/zx_circuits/000_test_circuit.qasm"
 tensor_circuit = zx.Circuit.load(circuit_path)
 zx_graph = tensor_circuit.to_graph()
+zx.draw_matplotlib(zx_graph, labels=True, figsize=(8, 4), h_edge_draw='blue', show_scalar=False,
+                   rows=None).savefig("figures/000_test_circuit.png")
 
 quantum_net = Network(zx_graph)
 
