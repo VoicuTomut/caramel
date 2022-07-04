@@ -10,14 +10,16 @@ class Network:
         self.opt_einsum_output = self.get_output(zx_graph)
         self.opt_einsum_input = self.get_input(zx_graph)
         self.size_dict = self.get_size_dic(zx_graph)
-        self.coo_mat=self.coo_matrix()
+        self.coo_mat = self.coo_matrix()
 
     def print_net(self):
         print("\n node_collection:", self.node_collection)
         print("\n input:", self.opt_einsum_input)
         print("\n output:", self.opt_einsum_output)
         print("\n size_dic:", self.size_dict)
-        print("\n coo_mat:", self.coo_mat)
+        print("\n coo_mat:")
+        for i in range(len(self.coo_mat[0])):
+            print("         {}-{}".format(self.coo_mat[0][i], self.coo_mat[1][i]))
 
     def get_node_collection(self, zx_graph):
         nodes = zx_graph.vertices()
@@ -82,13 +84,13 @@ class Network:
         for node_edges in inp:
             for edge in node_edges:
                 if edge in size_dic.keys():
-                    size_dic[edge] = size_dic[edge]+1
+                    size_dic[edge] = size_dic[edge] + 1
                 else:
                     size_dic[edge] = 1
 
         return size_dic
 
-    def adjacent_matrix(self):
+    def adjacent_matrix_opt(self):
 
         abj_mat = np.zeros((len(self.opt_einsum_input), len(self.opt_einsum_input)))
         for i, node_i in enumerate(self.opt_einsum_input):
@@ -99,7 +101,7 @@ class Network:
                     abj_mat[j][i] = abj_mat[i][j]
         return abj_mat
 
-    def adjacent_matrix_enhanced(self):
+    def adjacent_matrix_enhanced_opt(self):
         abj_mat = self.adjacent_matrix()
 
         for j, edge in enumerate(self.opt_einsum_output):
@@ -109,13 +111,14 @@ class Network:
         return abj_mat
 
     def coo_matrix(self):
-        coo_mat = [[0 for i in range(len(self.size_dict))],
-                   [0 for i in range(len(self.size_dict))]]
+        coo_mat = [[0 for _ in range(len(self.size_dict))],
+                   [0 for _ in range(len(self.size_dict))]]
         for edge in self.size_dict.keys():
             k = 0
-            for i, node_i in enumerate(self.opt_einsum_input):
+            for i, key_i in enumerate(sorted(self.node_collection.keys())):
+                node_i = self.node_collection[key_i]["edges"]
                 if edge in node_i:
-                    coo_mat[k][edge] = i
+                    coo_mat[k][edge] = key_i
                     k = k + 1
             if k == 1:
                 coo_mat[1][edge] = coo_mat[0][edge]

@@ -8,7 +8,7 @@ from tqdm import tqdm
 import pyzx as zx
 from caramel.interface_pyzx import Network
 from caramel.optimizer_mansikka import MansikkaOptimizer
-
+from caramel.utils import contraction_moment
 
 class CircuitDataset(Dataset):
     def __init__(self, root, target_files=None, test=False, transform=None, pre_transform=None, pre_filter=None):
@@ -79,11 +79,11 @@ class CircuitDataset(Dataset):
         :return: pytorch tensor
         """
         # degree -> number of edges
-        # order  -> -1 for nodes that don't have a dangling edge
+        # order  -> -1 for nodes that don't have an edge
         #           or 'i' where 'i' is the position in the output_order
 
         all_node_feats = []
-        for key in quantum_net.node_collection.keys():
+        for key in sorted(quantum_net.node_collection.keys()):
             node = quantum_net.node_collection[key]
             node_feats = []
             degree = len(node["edges"])
@@ -108,9 +108,10 @@ class CircuitDataset(Dataset):
         :return: pytorch tensor
         """
         # degree -> number of nodes
-        # order  -> -1 for edges that are not dangling edge
+        # order  -> -1 for edges that are not and edges
         #           or 'i' where 'i' is the position in the output_order
         # contraction_moment
+        # contraction_moments for  k previous heuristics may be added in the future
 
         all_edge_feats = []
         for edge in quantum_net.size_dict:
@@ -124,7 +125,7 @@ class CircuitDataset(Dataset):
                 if edge == ed:
                     order = output_order
 
-            contraction_moment = 1
+            contraction_moment = len(quantum_net.opt_einsum_input) - 1
 
             edge_feats.append(degree)
             edge_feats.append(order)
@@ -140,7 +141,7 @@ class CircuitDataset(Dataset):
         :param quantum_net:
         :return:
         """
-        return quantum_net.coo_mat
+        return torch.tensor(quantum_net.coo_mat)
 
     def _get_additional_info(self, quantum_net):
 
@@ -148,18 +149,29 @@ class CircuitDataset(Dataset):
         contraction_order = optimizer(quantum_net.opt_einsum_input,
                                       quantum_net.opt_einsum_output,
                                       quantum_net.size_dict)
-        return contraction_order
+        cm = contraction_moment(quantum_net.opt_einsum_input,
+                                quantum_net.size_dict,
+                                contraction_order)
+        return cm
 
     def len(self):
         return len(self.processed_file_names)
 
-    def get(self, idx):
-        data = torch.load(os.path.join(self.processed_dir, f'{self.tf[idx]}.pt'))
+    def get(self, id_x):
+        if self.tf[id_x][-3]== ".":
+            file = self.tf[id_x][:-3]
+        elif self.tf[id_x][-5] == ".":
+            file = self.tf[id_x][:-5]
+        else:
+            file = self.tf[id_x]
+
+        data = torch.load(os.path.join(self.processed_dir, f'{file}.pt'))
         return data
 
 
+
 """
-tf = ['tof_10_after_heavy', 'tof_10_after_light', 'tof_10_before',
+tf = ['000_test_circuit.qasm','tof_10_after_heavy', 'tof_10_after_light', 'tof_10_before',
       'tof_10_pyzx.qc', 'tof_10_tpar.qc', 'tof_3_after_heavy', 'tof_3_after_light',
       'tof_3_before', 'tof_3_pyzx.qc', 'tof_3_tpar.qc', 'tof_4_after_heavy', 'tof_4_after_light',
       'tof_4_before', 'tof_4_pyzx.qc', 'tof_4_tpar.qc', 'tof_5_after_heavy', 'tof_5_after_light',
@@ -168,9 +180,9 @@ tf = ['tof_10_after_heavy', 'tof_10_after_light', 'tof_10_before',
 dataset = CircuitDataset(root='C:/Users/tomut/Documents/GitHub/caramel/circuit_dataset/experiment_dataset/',
                          target_files=tf)
 
-idx = 6
-print("edge_index:\n", dataset[6].edge_index)
-print("node_atr:\n", dataset[6].x)
-print("edge_atr:\n", dataset[6].edge_attr)
-print("order\n", dataset[6].y)
+idx = -1
+print("edge_index:\n", dataset[idx].edge_index)
+print("node_atr:\n", dataset[idx].x)
+print("edge_atr:\n", dataset[idx].edge_attr)
+print("order\n", dataset[idx].y)
 """

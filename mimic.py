@@ -1,44 +1,56 @@
-import os
-import numpy as np
-import pyzx as zx
+"""
 
-from caramel.interface_pyzx import Network
-from caramel.optimizer_mansikka import MansikkaOptimizer
-from caramel.utils import *
+"""
+import networkx as nx
+import matplotlib.pyplot as plt
 
-circuit_path = "circuit_dataset/zx_circuits/000_test_circuit.qasm"
-tensor_circuit = zx.Circuit.load(circuit_path)
-zx_graph = tensor_circuit.to_graph()
+import torch
+import torch_geometric
+from caramel.models.dual_data_set_builder import CircuitDataset as DualCircuitDataset
+from caramel.utils import node_colour_contraction
 
-quantum_net = Network(zx_graph)
-quantum_net.print_net()
-abj_mat = quantum_net.adjacent_matrix_enhanced()
-print("\n Input:\n Circuit abj mat enhanced:\n", abj_mat)
+from caramel.models.m1_example import Dummy_Net
 
-optimizer = MansikkaOptimizer()
-contraction_order = optimizer(quantum_net.opt_einsum_input,
-                              quantum_net.opt_einsum_output,
-                              quantum_net.size_dict)
+# Device
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print("\n-Device set!-\n")
 
-print("\n Output:\n Contraction order:\n", contraction_order)
+# Get data set
 
-# Contraction order rules :
-# size: len(quantum_net.opt_einsum_input)-1
-# possible value: [ ...(<i, <=i),...]
-#
+tf = ['000_test_circuit.qasm', 'tof_10_after_heavy', 'tof_10_after_light', 'tof_10_before',
+      'tof_10_pyzx.qc', 'tof_10_tpar.qc', 'tof_3_after_heavy', 'tof_3_after_light',
+      'tof_3_before', 'tof_3_pyzx.qc', 'tof_3_tpar.qc', 'tof_4_after_heavy', 'tof_4_after_light',
+      'tof_4_before', 'tof_4_pyzx.qc', 'tof_4_tpar.qc', 'tof_5_after_heavy', 'tof_5_after_light',
+      'tof_5_before', 'tof_5_pyzx.qc', ]
+
+dataset = DualCircuitDataset(root='C:/Users/tomut/Documents/GitHub/caramel/circuit_dataset/dual_experiment_dataset/',
+                             target_files=tf)
+
+print("-Data extracted!- \n")
+
+data = dataset[0]
+print(data)
+# color_map = node_colour_contraction(data, x_poz=2)
+# g = torch_geometric.utils.to_networkx(data, to_undirected=True)
+# nx.draw(g, with_labels=True, node_color=color_map)
+# plt.savefig("figures/dual_input_graph.png")
+# plt.close()
+
+# color_map = node_colour_contraction(data, x_poz=None)
+# nx.draw(g, with_labels=True, node_color=color_map)
+# plt.savefig("figures/dual_target_graph.png")
+# plt.close()
 
 
+"""# Model
+feature_size = dataset[0].x.shape[1]
+model = Dummy_Net(feature_size=feature_size)
+print(model)
+print("Number of parameters: ", sum(p.numel() for p in model.parameters()))
+
+# Train
+model = model.to(device)
+print("model:\n", model)
 
 
-# folder path
-dir_path = r'C:\Users\tomut\Documents\GitHub\caramel\circuit_dataset\experiment_dataset\raw_dir'
-
-# list to store files
-res = []
-
-# Iterate directory
-for path in os.listdir(dir_path):
-    # check if current path is a file
-    if os.path.isfile(os.path.join(dir_path, path)):
-        res.append(path)
-print(res)
+data = dataset.to(device)"""

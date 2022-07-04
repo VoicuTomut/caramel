@@ -14,7 +14,7 @@ random.seed(327)
 class MansikkaOptimizer(oem.paths.PathOptimizer):
 
     def __call__(self, inputs, output, size_dict, memory_limit=None):
-        nr_tensors_to_rem = 2
+        # nr_tensors_to_rem = 2
         # print("inputs:", inputs)
         # print("len inp:", len(inputs))
         # print("outputs:", output)
