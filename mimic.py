@@ -13,7 +13,7 @@ from caramel.models.m1_example import Dummy_Net
 
 # Device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print("\n-Device set!-\n")
+print("\n-Device set!-\n\n")
 
 # Get data set
 
@@ -25,10 +25,11 @@ tf = ['000_test_circuit.qasm', 'tof_10_after_heavy', 'tof_10_after_light', 'tof_
 
 dataset = DualCircuitDataset(root='C:/Users/tomut/Documents/GitHub/caramel/circuit_dataset/dual_experiment_dataset/',
                              target_files=tf)
-
-print("-Data extracted!- \n")
+print("dataset:", dataset)
+print("\n-Data extracted!- \n\n")
 
 data = dataset[0]
+print("x_shape", dataset[0].x.shape[1])
 print(data)
 # color_map = node_colour_contraction(data, x_poz=2)
 # g = torch_geometric.utils.to_networkx(data, to_undirected=True)
@@ -42,15 +43,15 @@ print(data)
 # plt.close()
 
 
-"""# Model
+# Model
 feature_size = dataset[0].x.shape[1]
 model = Dummy_Net(feature_size=feature_size)
-print(model)
+print("model:", model)
 print("Number of parameters: ", sum(p.numel() for p in model.parameters()))
 
 # Train
 model = model.to(device)
-print("model:\n", model)
 
 
-data = dataset.to(device)"""
+
+data = dataset[0].to(device)
