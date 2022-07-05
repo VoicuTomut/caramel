@@ -53,14 +53,73 @@ print("Number of parameters: ", sum(p.numel() for p in model.parameters()))
 
 # untrained model
 model = model.to(device)
-data = dataset[-6].to(device)
+data = dataset[0].to(device)
 
 prediction = model(data.x, data.edge_index, data.edge_attr)
-print(prediction)
+print("prediction:", prediction)
 
-def mimic_loss(output, target):
-    loss = torch.sum((output - target) ** 2)
+
+def mimic_loss(prediction, target):
+    prediction = prediction.reshape(target.shape)
+    # print(target)
+    # print("max", max(target))
+    max_t = max(target)
+    # max_t = 1
+    loss = torch.sum((prediction - target / max_t) ** 2)
     return loss
 
 
+loss = mimic_loss(prediction, data.y)
+print("loss:", loss)
 
+# Training
+nr_epochs = 500
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
+loss_hist = []
+for epoch in range(nr_epochs):  # loop over the dataset multiple times
+
+    running_loss = 0.0
+    for data in tqdm(dataset):
+        # get the inputs; data is a list of [inputs, labels]
+        sample = data.to(device)
+
+        # zero the parameter gradients
+        optimizer.zero_grad()
+
+        # forward + backward + optimize
+        prediction = model(sample.x, sample.edge_index, sample.edge_attr)
+        loss = mimic_loss(prediction, data.y)
+        loss.backward()
+        optimizer.step()
+
+        # print statistics
+        running_loss += loss.item()
+
+    print(f'\n[{epoch + 1}] loss: {running_loss:.3f}')
+    loss_hist.append(running_loss)
+
+print('-Finished Training-\n ')
+
+plt.plot(loss_hist)
+plt.xlabel(' epochs')
+plt.ylabel(' loss')
+plt.title('loss history')
+plt.savefig("figures/dummy_loss_history.png")
+plt.show()
+plt.close()
+
+plt.plot(loss_hist[400:])
+plt.xlabel(' epochs')
+plt.ylabel(' loss')
+plt.title('loss history cut ')
+plt.savefig("figures/dummy_loss_history_cut.png")
+plt.show()
+plt.close()
+
+# Model after training
+data = dataset[0].to(device)
+prediction = model(data.x, data.edge_index, data.edge_attr)
+print("prediction:", prediction*max(data.y))
+loss = mimic_loss(prediction, data.y)
+print("loss:", loss)

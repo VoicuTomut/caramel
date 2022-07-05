@@ -157,7 +157,8 @@ class CircuitDataset(Dataset):
         cm = contraction_moment(quantum_net.opt_einsum_input,
                                 quantum_net.size_dict,
                                 contraction_order)
-        return cm
+
+        return torch.tensor(cm)
 
     def len(self):
         return len(self.processed_file_names)
