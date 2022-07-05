@@ -17,7 +17,7 @@ class Dummy_Net(torch.nn.Module):
         embedding_size = 128
         n_heads = 4
         dropout_rate = 0.9
-        edge_dim = 11
+        edge_dim = 1
         # Transformation layer
         self.conv1 = TransformerConv(feature_size,
                                      embedding_size,
@@ -25,13 +25,18 @@ class Dummy_Net(torch.nn.Module):
                                      dropout=dropout_rate,
                                      edge_dim=edge_dim,
                                      beta=True)
+        self.transf1 = Linear(embedding_size * n_heads, embedding_size)
+        self.bn1 = BatchNorm1d(embedding_size)
 
 
-    def forward(self, x, edge_attr, edge_index, batch_index):
-            print("x0:", x)
+    def forward(self, x, edge_index, edge_attr):
+            print("x0:", x.shape)
+            print("edge_index:", edge_index.shape)
+            print("edge_attr:", edge_attr.shape)
             x = self.conv1(x, edge_index, edge_attr)
-            x = torch.relu(self.transf1(x))
+            x = self.transf1(x)
             x = self.bn1(x)
+            print("x.shape:",x.shape[0])
             print("x1:",x)
 
 

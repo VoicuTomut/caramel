@@ -3,9 +3,12 @@
 """
 import networkx as nx
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 import torch
+import torch.optim as optim
 import torch_geometric
+from torch_geometric.data import DataLoader
 from caramel.models.dual_data_set_builder import CircuitDataset as DualCircuitDataset
 from caramel.utils import node_colour_contraction
 
@@ -29,7 +32,6 @@ print("dataset:", dataset)
 print("\n-Data extracted!- \n\n")
 
 data = dataset[0]
-print("x_shape", dataset[0].x.shape[1])
 print(data)
 # color_map = node_colour_contraction(data, x_poz=2)
 # g = torch_geometric.utils.to_networkx(data, to_undirected=True)
@@ -49,9 +51,16 @@ model = Dummy_Net(feature_size=feature_size)
 print("model:", model)
 print("Number of parameters: ", sum(p.numel() for p in model.parameters()))
 
-# Train
+# untrained model
 model = model.to(device)
-
-
-
 data = dataset[0].to(device)
+
+prediction = model(data.x, data.edge_index, data.edge_attr)
+print(prediction)
+
+def mimic_loss(output, target):
+    loss = torch.sum((output - target) ** 2)
+    return loss
+
+
+

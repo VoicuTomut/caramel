@@ -82,7 +82,10 @@ class CircuitDataset(Dataset):
         # For the dual representation edges represent only the fact that two
         # edges  from the initial circuit have a common node.
 
-        all_node_feats = np.ones(len(edg_index[0]))
+        feats = np.ones(len(edg_index[0]))
+        all_node_feats = []
+        for e in feats:
+            all_node_feats.append(e)
         return torch.tensor(all_node_feats, dtype=torch.float)
 
     def _get_node_feats(self, quantum_net):
@@ -124,6 +127,7 @@ class CircuitDataset(Dataset):
         :return:
         """
         coo_mat = [[], []]
+        # coo_mat = []
         nr_nodes = len(quantum_net.size_dict.keys())
         dual_abj = np.zeros((nr_nodes, nr_nodes))
 
@@ -136,6 +140,8 @@ class CircuitDataset(Dataset):
         for j in range(0, len(dual_abj)):
             for k in range(j + 1, len(dual_abj)):
                 if dual_abj[k][l] == 1:
+                    # coo_mat.append([j, k])
+                    # coo_mat.append([k, j])
                     coo_mat[0].append(j)
                     coo_mat[1].append(k)
                     coo_mat[0].append(k)
