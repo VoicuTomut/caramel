@@ -53,7 +53,7 @@ print("Number of parameters: ", sum(p.numel() for p in model.parameters()))
 
 # untrained model
 model = model.to(device)
-data = dataset[0].to(device)
+data = dataset[-6].to(device)
 
 prediction = model(data.x, data.edge_index, data.edge_attr)
 print(prediction)

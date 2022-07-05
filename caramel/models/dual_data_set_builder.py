@@ -84,8 +84,8 @@ class CircuitDataset(Dataset):
 
         feats = np.ones(len(edg_index[0]))
         all_node_feats = []
-        for e in feats:
-            all_node_feats.append(e)
+        for l in range (len(edg_index[0])) :
+            all_node_feats.append([1])
         return torch.tensor(all_node_feats, dtype=torch.float)
 
     def _get_node_feats(self, quantum_net):
