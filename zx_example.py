@@ -1,12 +1,9 @@
-import opt_einsum
-from opt_einsum import RandomGreedy
-
 from cotengra import ContractionTree
 import numpy as np
 import pyzx as zx
 
 from caramel.interface_pyzx import Network
-from caramel.optimizer_mansikka import MansikkaOptimizer
+from caramel.path_optimizer.optimizer_mansikka import MansikkaOptimizer
 from caramel.utils import contraction_moment
 
 optimizer = MansikkaOptimizer()
@@ -42,11 +39,11 @@ tree = ContractionTree.from_path(inputs=quantum_net.opt_einsum_input,
 print("\n ------ contraction cost summary ------")
 print(
     "log10[FLOPs]: ",
-    "%.3f" % np.log10(tree.total_flops()),
+    "%.3f" % np.log10(tree.total_flops()), #s um of th eflops cont by evry nod ein the tree
     " log2[SIZE]: ",
-    "%.0f" % tree.contraction_width(),
+    "%.0f" % tree.contraction_width(), # log 2 of the size of th elasrgest tensor
     " log2[WRITE]: ",
-    "%.3f" % np.log2(tree.total_write()),
+    "%.3f" % np.log2(tree.total_write()), #total amount of created  memory
 )
 print("contraction_path:",contraction_path)
 print("input nodes:", quantum_net.opt_einsum_input)

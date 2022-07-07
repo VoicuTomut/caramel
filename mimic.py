@@ -1,18 +1,13 @@
 """
 
 """
-import networkx as nx
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 import torch
-import torch.optim as optim
-import torch_geometric
-from torch_geometric.data import DataLoader
-from caramel.models.dual_data_set_builder import CircuitDataset as DualCircuitDataset
-from caramel.utils import node_colour_contraction
+from caramel.models.circuits_to_dataset.dual_data_set_builder import CircuitDataset as DualCircuitDataset
 
-from caramel.models.m1_example import Dummy_Net
+from caramel.models.dummy_model import Dummy_Net
 
 # Device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

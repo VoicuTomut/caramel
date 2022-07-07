@@ -7,9 +7,8 @@ from tqdm import tqdm
 
 import pyzx as zx
 from caramel.interface_pyzx import Network
-from caramel.optimizer_mansikka import MansikkaOptimizer
+from caramel.path_optimizer.optimizer_mansikka import MansikkaOptimizer
 from caramel.utils import contraction_moment
-
 
 class CircuitDataset(Dataset):
     def __init__(self, root, target_files=None, test=False, transform=None, pre_transform=None, pre_filter=None):
@@ -59,8 +58,8 @@ class CircuitDataset(Dataset):
             quantum_net = Network(zx_graph)
 
             nod_feats = self._get_node_feats(quantum_net)
+            edge_feats = self._get_edge_feats(quantum_net)
             edge_index = self._get_connectivity(quantum_net)
-            edge_feats = self._get_edge_feats(edge_index)
 
             contraction_suggestion = self._get_additional_info(quantum_net)
 
@@ -73,28 +72,42 @@ class CircuitDataset(Dataset):
             file_name = raw_path.split("\\")[-1].split(".")[0]
             torch.save(data, os.path.join(self.processed_dir, f'{file_name}.pt'))
 
-    def _get_edge_feats(self, edg_index):
+    def _get_node_feats(self, quantum_net):
         """
         Return a 2d tensor  of shape [number of nodes, node features size]
         :param quantum_net:
         :return: pytorch tensor
         """
-        # For the dual representation edges represent only the fact that two
-        # edges  from the initial circuit have a common node.
+        # degree -> number of edges
+        # order  -> -1 for nodes that don't have an edge
+        #           or 'i' where 'i' is the position in the output_order
 
-        feats = np.ones(len(edg_index[0]))
         all_node_feats = []
-        for l in range (len(edg_index[0])) :
-            all_node_feats.append([1])
+        for key in sorted(quantum_net.node_collection.keys()):
+            node = quantum_net.node_collection[key]
+            node_feats = []
+            degree = len(node["edges"])
+            order = -1
+            for edge in node["edges"]:
+                for output_order in range(len(quantum_net.opt_einsum_output)):
+                    ed = quantum_net.opt_einsum_output[output_order]
+                    if edge == ed:
+                        edge = output_order
+
+            node_feats.append(degree)
+            node_feats.append(order)
+            all_node_feats.append(node_feats)
+
+        all_node_feats = np.array(all_node_feats)
         return torch.tensor(all_node_feats, dtype=torch.float)
 
-    def _get_node_feats(self, quantum_net):
+    def _get_edge_feats(self, quantum_net):
         """
         Return a 2d tensor  of shape [number of edges, edge  features size]
         :param quantum_net:
         :return: pytorch tensor
         """
-        # degree -> number of nodes that connects in the circuit graph
+        # degree -> number of nodes
         # order  -> -1 for edges that are not and edges
         #           or 'i' where 'i' is the position in the output_order
         # contraction_moment
@@ -112,9 +125,11 @@ class CircuitDataset(Dataset):
                 if edge == ed:
                     order = output_order
 
+            contraction_moment = len(quantum_net.opt_einsum_input) - 1
+
             edge_feats.append(degree)
             edge_feats.append(order)
-            edge_feats.append(len(quantum_net.opt_einsum_input) - 1)
+            edge_feats.append(contraction_moment)
             all_edge_feats.append(edge_feats)
 
         all_edge_feats = np.array(all_edge_feats)
@@ -126,27 +141,7 @@ class CircuitDataset(Dataset):
         :param quantum_net:
         :return:
         """
-        coo_mat = [[], []]
-        # coo_mat = []
-        nr_nodes = len(quantum_net.size_dict.keys())
-        dual_abj = np.zeros((nr_nodes, nr_nodes))
-
-        for k in quantum_net.size_dict.keys():
-            for nodes in quantum_net.opt_einsum_input:
-                if k in nodes:
-                    for l in nodes:
-                        dual_abj[k][l] = 1
-
-        for j in range(0, len(dual_abj)):
-            for k in range(j + 1, len(dual_abj)):
-                if dual_abj[k][l] == 1:
-                    # coo_mat.append([j, k])
-                    # coo_mat.append([k, j])
-                    coo_mat[0].append(j)
-                    coo_mat[1].append(k)
-                    coo_mat[0].append(k)
-                    coo_mat[1].append(j)
-        return torch.tensor(coo_mat)
+        return torch.tensor(quantum_net.coo_mat)
 
     def _get_additional_info(self, quantum_net):
 
@@ -157,14 +152,13 @@ class CircuitDataset(Dataset):
         cm = contraction_moment(quantum_net.opt_einsum_input,
                                 quantum_net.size_dict,
                                 contraction_order)
-
-        return torch.tensor(cm)
+        return cm
 
     def len(self):
         return len(self.processed_file_names)
 
     def get(self, id_x):
-        if self.tf[id_x][-3] == ".":
+        if self.tf[id_x][-3]== ".":
             file = self.tf[id_x][:-3]
         elif self.tf[id_x][-5] == ".":
             file = self.tf[id_x][:-5]
@@ -174,6 +168,8 @@ class CircuitDataset(Dataset):
         data = torch.load(os.path.join(self.processed_dir, f'{file}.pt'))
         return data
 
+
+
 """
 tf = ['000_test_circuit.qasm','tof_10_after_heavy', 'tof_10_after_light', 'tof_10_before',
       'tof_10_pyzx.qc', 'tof_10_tpar.qc', 'tof_3_after_heavy', 'tof_3_after_light',
@@ -181,7 +177,7 @@ tf = ['000_test_circuit.qasm','tof_10_after_heavy', 'tof_10_after_light', 'tof_1
       'tof_4_before', 'tof_4_pyzx.qc', 'tof_4_tpar.qc', 'tof_5_after_heavy', 'tof_5_after_light',
       'tof_5_before', 'tof_5_pyzx.qc', ]
 
-dataset = CircuitDataset(root='C:/Users/tomut/Documents/GitHub/caramel/circuit_dataset/dual_experiment_dataset/',
+dataset = CircuitDataset(root='C:/Users/tomut/Documents/GitHub/caramel/circuit_dataset/experiment_dataset/',
                          target_files=tf)
 
 idx = -1

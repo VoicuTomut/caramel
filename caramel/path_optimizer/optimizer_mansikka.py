@@ -1,24 +1,23 @@
 """
-circuit networks
+MansikkaOptimizer  is an addaptation of the algorithm from the paper paper
 """
+
 import copy
-from typing import List, Tuple
-
 import opt_einsum as oem
-
-import random
-
-random.seed(327)
 
 
 class MansikkaOptimizer(oem.paths.PathOptimizer):
 
     def __call__(self, inputs, output, size_dict, memory_limit=None):
-        # nr_tensors_to_rem = 2
-        # print("inputs:", inputs)
-        # print("len inp:", len(inputs))
-        # print("outputs:", output)
-        # print("size_dic:", size_dict)
+        """
+
+        :param inputs:
+        :param output:
+        :param size_dict:
+        :param memory_limit:
+        :return:
+        """
+
         mansikka = MansikkaGraph(inputs, output, size_dict)
         contraction_order = get_contraction_order(mansikka, nr_tensors_to_rem=2,
                                                   nr_iter=10)  # [(0, 1)] * (len(inputs) - 1)
@@ -157,7 +156,7 @@ class MansikkaGraph:
             # update new_order
             new_order.remove(u)
             if option is True:
-                new_order = new_graph.tree_decomposition()
+                new_graph.tree_decomposition()
 
         tw = new_graph.find_treewidth_from_order(new_order)
 
