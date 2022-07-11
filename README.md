@@ -5,7 +5,7 @@
 ## Usage
 
 ```python
-import torch
+
 
 ```
 
