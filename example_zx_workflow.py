@@ -1,5 +1,5 @@
 """
-PyZX and opt-einsum contraction workflow example:.
+PyZX and opt-einsum contraction workflow example:
 """
 
 
