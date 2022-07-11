@@ -5,11 +5,12 @@ Useful functions.
 
 def edge_list_to_contraction_list(edge_list, opt_einsum_inputs):
     """
-    convert a list of
+    Convert an edge list from a Network to opt_einsum input format.
     :param edge_list:
-    :param opt_einsum_inputs:
-    :return:
+    :param opt_einsum_inputs: [ {edge_i, edge_j, edge_k},...]
+    :return: [ (node_i, node_j), ] contraction order in opt_einsum format.
     """
+    print("edge list",edge_list)
     order = []
     nr_nodes = len(opt_einsum_inputs)
     for edge in edge_list:
@@ -30,11 +31,11 @@ def edge_list_to_contraction_list(edge_list, opt_einsum_inputs):
 
 def contraction_moment(opt_einsum_input, size_dic, contraction_path):
     """
-
-    :param opt_einsum_input:
-    :param size_dic:
-    :param contraction_path:
-    :return:
+    Convert opt_einsum contraction path to a moment list where moment[edge]= step on witch the edge is contracted.
+    :param opt_einsum_input[ {edge_i, edge_j, edge_k},...]
+    :param size_dic: { edge:nr_connections ...}
+    :param contraction_path: [ (node_i,node_j), ..]
+    :return: [ step_i, step_j, ...]
     """
     edge_moment = [len(opt_einsum_input)-1 for _ in size_dic.keys()]
 
@@ -59,6 +60,12 @@ def contraction_moment(opt_einsum_input, size_dic, contraction_path):
 
 
 def node_colour_contraction(data, x_poz=None):
+    """
+    Return a coloring for the nodes from  data_graph
+    :param data: PyTorch data graph
+    :param x_poz: if true the coloring is based on node features else is base on the graph y.
+    :return: [colour, colour,]  , colour in rgb format.
+    """
     if x_poz is None:
         color_map = []
         for node in range(len(data.x)):
@@ -77,6 +84,12 @@ def node_colour_contraction(data, x_poz=None):
 
 
 def edge_colour_contraction(data, edge_attr_number=None):
+    """
+    Return a coloring for the edges from  data_graph
+    :param data: PyTorch data graph
+    :param x_poz: if true the coloring is based on node features else is base on the graph y.
+    :return: [colour, colour,]
+    """
     if edge_attr_number is None:
         color_map = []
         for node in range(len(data.edge_attr)):
