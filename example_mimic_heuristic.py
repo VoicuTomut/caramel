@@ -1,5 +1,5 @@
 """
-
+Learning a contraction heuristic workflow example :
 """
 import matplotlib.pyplot as plt
 from tqdm import tqdm

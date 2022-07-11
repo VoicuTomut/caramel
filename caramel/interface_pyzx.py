@@ -140,11 +140,13 @@ class Network:
                     abj_mat[i][i] = j
         return abj_mat
 
-    def coo_matrix(self):
+    def coo_matrix(self, direct = False):
         """
 
+        :param direct:  Bool if True the reverse edge will be added. The doubles will be added at the end.
         :return:[[][]] connection matrix len(coo_mat[0])=len(coo_mat[1])=nr_edges.
         """
+
         coo_mat = [[0 for _ in range(len(self.size_dict))],
                    [0 for _ in range(len(self.size_dict))]]
         for edge in self.size_dict.keys():
@@ -153,10 +155,15 @@ class Network:
                 node_i = self.node_collection[key_i]["edges"]
                 if edge in node_i:
                     coo_mat[k][edge] = key_i
+
                     k = k + 1
             if k == 1:
                 raise Exception("Some problem with coo mat  ")
 
+        if direct:
+            l = coo_mat[0]
+            coo_mat[0] = coo_mat[0].append(coo_mat[1])
+            coo_mat[1] = coo_mat[1].append(l)
 
         return coo_mat
 

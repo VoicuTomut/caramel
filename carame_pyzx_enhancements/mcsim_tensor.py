@@ -1,4 +1,6 @@
-import math
+"""
+A pyzx custom contraction path option.
+"""
 
 try:
     import cupy as np
@@ -11,7 +13,7 @@ except:
 
 from pyzx.utils import EdgeType
 
-from pyzx_enhancements.mcsim_node import MansikkaNode
+from carame_pyzx_enhancements.mcsim_node import MansikkaNode
 
 
 def mcsim_tensorfy(pyzx_graph, contraction_edge_list, preserve_scalar: bool = True) -> np.ndarray:

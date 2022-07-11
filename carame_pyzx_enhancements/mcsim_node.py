@@ -1,6 +1,10 @@
+"""
+An auxiliary class that helps with custom contraction.
+"""
+
 import pyzx
 
-from pyzx_enhancements.extract_tensor import get_tensor_from_g
+from carame_pyzx_enhancements.extract_tensor import get_tensor_from_g
 
 
 class MansikkaNode:
