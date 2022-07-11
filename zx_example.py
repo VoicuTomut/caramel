@@ -1,10 +1,11 @@
 from cotengra import ContractionTree
 import numpy as np
 import pyzx as zx
+from pyzx_enhancements.mcsim_tensor import mcsim_tensorfy
 
 from caramel.interface_pyzx import Network
 from caramel.path_optimizer.optimizer_mansikka import MansikkaOptimizer
-from caramel.utils import contraction_moment
+from caramel.utils import contraction_moment, contraction_moment_to_zx_contraction
 
 optimizer = MansikkaOptimizer()
 
@@ -39,9 +40,9 @@ tree = ContractionTree.from_path(inputs=quantum_net.opt_einsum_input,
 print("\n ------ contraction cost summary ------")
 print(
     "log10[FLOPs]: ",
-    "%.3f" % np.log10(tree.total_flops()), #s um of th eflops cont by evry nod ein the tree
+    "%.3f" % np.log10(tree.total_flops()), #sum of th eflops cont by evry nod ein the tree
     " log2[SIZE]: ",
-    "%.0f" % tree.contraction_width(), # log 2 of the size of th elasrgest tensor
+    "%.0f" % tree.contraction_width(), # log 2 of the size of the lasrgest tensor
     " log2[WRITE]: ",
     "%.3f" % np.log2(tree.total_write()), #total amount of created  memory
 )
@@ -53,5 +54,20 @@ cm = contraction_moment(quantum_net.opt_einsum_input,
                         contraction_path)
 print(cm)
 
+print("\n ------ contraction in zx format ------")
+contraction_list = contraction_moment_to_zx_contraction( cm, quantum_net)
+print("contraction_list zx:", contraction_list)
+print("nr edges to contract:", len(contraction_list))
 
+custom_order_result = zx_graph.to_matrix(my_tensorfy=mcsim_tensorfy, contraction_order = contraction_list)
+print("circuit matrix:\n", custom_order_result)
 
+simple_zx_result = zx_graph.to_matrix()
+print(" simple circuit matrix:\n", custom_order_result)
+print("Equals:         ", np.allclose(custom_order_result, simple_zx_result))
+
+s = 0
+for i in range(len(custom_order_result)):
+    for j in range(len(custom_order_result)):
+        s = s + (abs(custom_order_result[i][j] - simple_zx_result[i][j])) ** 2
+print("Difference between results :", s)

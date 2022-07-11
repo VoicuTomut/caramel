@@ -287,7 +287,7 @@ def contraction_order_to_opt_einsum(contraction_order, inputs, outputs):
     """
      Convert contraction order to opt_einsum format.
     :param contraction_order: [ dual_node,  ] contraction order: [ edge_i, edge_j, .. ],
-                                dual graph nodes are edges in initial graph
+                                dual graph nodes are edges in initial graph. edge_i =(node_a, node_b)
     :param inputs: [ {}, {}..] list of circuit nodes without the input/output nodes
     :param outputs: [ , , ] list of final edges (input , output edges)
     :return: [ (node_i,node_j),  ..] contraction order as a list of nodes pairs.

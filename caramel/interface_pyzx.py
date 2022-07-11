@@ -155,7 +155,8 @@ class Network:
                     coo_mat[k][edge] = key_i
                     k = k + 1
             if k == 1:
-                coo_mat[1][edge] = coo_mat[0][edge]
+                raise Exception("Some problem with coo mat  ")
+
 
         return coo_mat
 
