@@ -1,9 +1,15 @@
 """
-
+Useful functions.
 """
 
 
 def edge_list_to_contraction_list(edge_list, opt_einsum_inputs):
+    """
+    convert a list of
+    :param edge_list:
+    :param opt_einsum_inputs:
+    :return:
+    """
     order = []
     nr_nodes = len(opt_einsum_inputs)
     for edge in edge_list:

@@ -7,7 +7,7 @@ from tqdm import tqdm
 import torch
 from caramel.models.circuits_to_dataset.dual_data_set_builder import CircuitDataset as DualCircuitDataset
 
-from caramel.models.dummy_model import Dummy_Net
+from caramel.models.dummy_model import DummyModel
 
 # Device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -42,7 +42,7 @@ print(data)
 
 # Model
 feature_size = dataset[0].x.shape[1]
-model = Dummy_Net(feature_size=feature_size)
+model = DummyModel(feature_size=feature_size)
 print("model:", model)
 print("Number of parameters: ", sum(p.numel() for p in model.parameters()))
 

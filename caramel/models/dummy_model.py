@@ -1,5 +1,6 @@
 """
-
+This is a dummy PyTorch Geometric model that takes a graph as input and outputs the moment of contraction for each node.
+One of this  project purposes is to improve this to one more functional model.
 """
 
 import torch
@@ -9,9 +10,9 @@ from torch.nn import Linear, BatchNorm1d, ModuleList
 from torch_geometric.nn import TransformerConv
 
 
-class Dummy_Net(torch.nn.Module):
+class DummyModel(torch.nn.Module):
     def __init__(self, feature_size):
-        super(Dummy_Net, self).__init__()
+        super(DummyModel, self).__init__()
 
         embedding_size = 128
         n_heads = 4

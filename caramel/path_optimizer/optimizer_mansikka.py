@@ -1,5 +1,5 @@
 """
-MansikkaOptimizer  is an addaptation of the algorithm from the paper paper
+MansikkaOptimizer  is an adaptation of the algorithm from the paper: https://arxiv.org/abs/2004.10892
 """
 
 import copy
@@ -11,11 +11,11 @@ class MansikkaOptimizer(oem.paths.PathOptimizer):
     def __call__(self, inputs, output, size_dict, memory_limit=None):
         """
 
-        :param inputs:
-        :param output:
-        :param size_dict:
-        :param memory_limit:
-        :return:
+        :param inputs: [ {}, {}..] list of circuit nodes without the input/output nodes
+        :param output: [ , , ] list of final edges (input , output edges)
+        :param size_dict: { edge_i:number_connections, }
+        :param memory_limit: int
+        :return: [ (node_i,node_j),  ..] contraction order as a list of nodes pairs.
         """
 
         mansikka = MansikkaGraph(inputs, output, size_dict)
@@ -33,8 +33,13 @@ class MansikkaGraph:
     """
 
     def __init__(self, inputs, output, size_dict):
-
-        # print("sizedic :",size_dict)
+        """
+        Construct a structure that's equivalent with the dual of the graph.
+        :param inputs: [ {}, {}..] list of circuit nodes without the input/output nodes
+        :param output: [ , , ] list of final edges (input , output edges)
+        :param size_dict: { edge_i:number_connections, }
+        """
+        # print("size_dict :",size_dict)
         dual_vert = [k for k in size_dict.keys() if k not in output]
 
         dual_edges = set()
@@ -55,12 +60,11 @@ class MansikkaGraph:
 
     def neighbourhood(self, node):
         """
-        Args:
-            node:
 
-        Returns: list of all the neighbors of the node node
-
+        :param node: int
+        :return: list of all the neighbors of the node node
         """
+
         nb = []
 
         for edge in self.edges:
@@ -72,6 +76,10 @@ class MansikkaGraph:
         return nb
 
     def construct_dual(self):
+        """
+
+        :return: dual of the graph
+        """
         dual_vert = [v for v in self.edges]
         dual_edges = set()
 
@@ -87,7 +95,15 @@ class MansikkaGraph:
         return MansikkaGraph(dual_vert, dual_edges)
 
     def find_treewidth_from_order(self, elimination_order):
+        """
+        Tree width is proportionate with the computation cost of the contraction so by minimizing the tree width
+        the contraction algorithm will minimize the computation cost.
+        :param elimination_order: [ dual_node,  ] contraction order: [ edge_i, edge_j, .. ],
+                                    dual graph nodes are edges in initial graph
+        :return: int treewidth
+        """
 
+        # print("elimination order", elimination_order)
         # Work on a copy
         working_graph = copy.deepcopy(self)
         # working_graph = Graph(self.vertices.copy(), self.edges.copy())
@@ -118,15 +134,13 @@ class MansikkaGraph:
             self, elimination_order, nr_tensors_to_rem, option=False, direct_minimization=False
     ):
         """
-        Args:
-            self:
-            elimination_order: ??
-            nr_tensors_to_rem: Parameter m from the paper
-            option:
-            direct_minimization:
 
-        Returns:
-
+        :param elimination_order: [ dual_node,  ], contraction order: [ edge_i, edge_j, .. ],
+                                dual graph nodes are edges in initial graph.
+        :param nr_tensors_to_rem: int , nr tensor to remove.
+        :param option: bool , if True it will recalculate th order.
+        :param direct_minimization: bool, if True it will recalculate th order.
+        :return: new graph , new contraction order, treewidth, removed vertices.
         """
         removed_vertices = []
         new_graph = copy.deepcopy(self)
@@ -163,6 +177,11 @@ class MansikkaGraph:
         return new_graph, new_order, tw, removed_vertices
 
     def removal_recommendation(self, order=None):
+        """
+
+        :param order: contraction order.
+        :return:  the edge that should be removed.
+        """
         # this will be updated to betweenness centrality
 
         if order is not None:
@@ -227,6 +246,13 @@ class MansikkaGraph:
 
 
 def get_contraction_order(graph, nr_tensors_to_rem, nr_iter=10):
+    """
+
+    :param graph: MansikkaGraph
+    :param nr_tensors_to_rem: int number of nodes for elimination.
+    :param nr_iter: int number of iterations
+    :return: [ dual_node,  ] contraction order: [ edge_i, edge_j, .. ], dual graph nodes are edges in initial graph
+    """
     working_graph = graph  # MansikkaGraph(graph.vertices.copy(), graph.edges.copy())
     initial_order = [k for k in graph.vertices]
     # return initial_order
@@ -258,6 +284,14 @@ def get_contraction_order(graph, nr_tensors_to_rem, nr_iter=10):
 
 
 def contraction_order_to_opt_einsum(contraction_order, inputs, outputs):
+    """
+     Convert contraction order to opt_einsum format.
+    :param contraction_order: [ dual_node,  ] contraction order: [ edge_i, edge_j, .. ],
+                                dual graph nodes are edges in initial graph
+    :param inputs: [ {}, {}..] list of circuit nodes without the input/output nodes
+    :param outputs: [ , , ] list of final edges (input , output edges)
+    :return: [ (node_i,node_j),  ..] contraction order as a list of nodes pairs.
+    """
     # print("inputs", inputs)
     # print("outputs", outputs)
     # print("initial contraction order:", contraction_order)

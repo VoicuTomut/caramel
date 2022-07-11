@@ -1,3 +1,14 @@
+"""
+An example of how to create a pytorch data set from a set of quantum circuits.
+In this case the circuit graph is not saved as it is. The data set contain the dual of the graph.
+https://pytorch-geometric.readthedocs.io/en/latest/notes/create_dataset.html
+https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
+
+dataset :
+ x = dual_graph info
+ y = MansikkaOptimizer contraction order
+"""
+
 import os
 
 import numpy as np
@@ -15,10 +26,12 @@ class CircuitDataset(Dataset):
     def __init__(self, root, target_files=None, test=False, transform=None, pre_transform=None, pre_filter=None):
         """
 
-        :param root: Where the data set should be stored. This folder is split in raw_dir and processed_dir
-        :param transform:
-        :param pre_transform:
-        :param pre_filter:
+        :param root: 'path/to/circuits' Where the data set should be stored.
+                        This folder is split in raw_dir and processed_dir
+        :param transform:  Optional  these are for the situation in witch we
+                                     want to do additional changes to th edata set before processing
+        :param pre_transform: Optional
+        :param pre_filter: Optional
         """
         self.test = test
         self.tf = target_files
@@ -29,7 +42,7 @@ class CircuitDataset(Dataset):
         """
         If this files exist in the raw_dir download is not triggered.
         Download function is not implemented yet
-        :return:
+        :return: [ 'file_name'.. ]
         """
         return self.tf
 
@@ -39,8 +52,8 @@ class CircuitDataset(Dataset):
     @property
     def processed_file_names(self):
         """
-        If these files are already in processed_dir the processing is skipped.
-        :return:
+        IIf these files are already in processed_dir the processing is skipped.
+        :return: [ 'file_name'.. ]
         """
         processed_file_names = []
         for file in self.tf:
@@ -52,6 +65,9 @@ class CircuitDataset(Dataset):
         return processed_file_names
 
     def process(self):
+        """
+        The core function for building the data set.
+        """
 
         for raw_path in tqdm(self.raw_paths, total=len(self.raw_paths)):
             tensor_circuit = zx.Circuit.load(raw_path)
@@ -76,22 +92,21 @@ class CircuitDataset(Dataset):
     def _get_edge_feats(self, edg_index):
         """
         Return a 2d tensor  of shape [number of nodes, node features size]
-        :param quantum_net:
+        :param edg_index:  pytorch tensor. COO matrix
         :return: pytorch tensor
         """
         # For the dual representation edges represent only the fact that two
         # edges  from the initial circuit have a common node.
 
-        feats = np.ones(len(edg_index[0]))
         all_node_feats = []
-        for l in range (len(edg_index[0])) :
+        for _ in range(len(edg_index[0])):
             all_node_feats.append([1])
         return torch.tensor(all_node_feats, dtype=torch.float)
 
     def _get_node_feats(self, quantum_net):
         """
         Return a 2d tensor  of shape [number of edges, edge  features size]
-        :param quantum_net:
+        :param quantum_net:  a Network class object.
         :return: pytorch tensor
         """
         # degree -> number of nodes that connects in the circuit graph
@@ -123,8 +138,8 @@ class CircuitDataset(Dataset):
     def _get_connectivity(self, quantum_net):
         """
          Return graph connectivity in COO format with shape [2, num_edges]
-        :param quantum_net:
-        :return:
+        :param quantum_net: a Network class object.
+        :return:pytorch tensor
         """
         coo_mat = [[], []]
         # coo_mat = []
@@ -149,7 +164,11 @@ class CircuitDataset(Dataset):
         return torch.tensor(coo_mat)
 
     def _get_additional_info(self, quantum_net):
-
+        """
+        y -> the contraction order given by MansikkaOptimizer
+        :param quantum_net: a Network class object
+        :return: pytorch tensor
+        """
         optimizer = MansikkaOptimizer()
         contraction_order = optimizer(quantum_net.opt_einsum_input,
                                       quantum_net.opt_einsum_output,
@@ -173,6 +192,7 @@ class CircuitDataset(Dataset):
 
         data = torch.load(os.path.join(self.processed_dir, f'{file}.pt'))
         return data
+
 
 """
 tf = ['000_test_circuit.qasm','tof_10_after_heavy', 'tof_10_after_light', 'tof_10_before',
