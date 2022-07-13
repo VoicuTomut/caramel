@@ -37,6 +37,24 @@ class DummyModel(torch.nn.Module):
         self.transf2 = Linear(1 * n_heads, 1)
         self.bn2 = BatchNorm1d(1)
 
+        self.conv3 = TransformerConv(embedding_size,
+                                     1,
+                                     heads=n_heads,
+                                     dropout=dropout_rate,
+                                     edge_dim=edge_dim,
+                                     beta=True)
+        self.transf3 = Linear(1 * n_heads, 1)
+        self.bn3 = BatchNorm1d(1)
+
+        self.conv4 = TransformerConv(embedding_size,
+                                     1,
+                                     heads=n_heads,
+                                     dropout=dropout_rate,
+                                     edge_dim=edge_dim,
+                                     beta=True)
+        self.transf4 = Linear(1 * n_heads, 1)
+        self.bn4 = BatchNorm1d(1)
+
     def forward(self, x, edge_index, edge_attr):
 
         x = self.conv1(x, edge_index, edge_attr)
@@ -46,6 +64,14 @@ class DummyModel(torch.nn.Module):
         x = self.conv2(x, edge_index, edge_attr)
         x = self.transf2(x)
         x = self.bn2(x)
+
+        # x = self.conv3(x, edge_index, edge_attr)
+        # x = self.transf3(x)
+        # x = self.bn3(x)
+        #
+        # x = self.conv4(x, edge_index, edge_attr)
+        # x = self.transf4(x)
+        # x = self.bn4(x)
 
         # print("x.shape:", x.shape)
 

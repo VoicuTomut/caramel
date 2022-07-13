@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af01dded-c506-4926-ac01-f62533fef4fc" name="Changes" comment="" />
+    <list default="true" id="af01dded-c506-4926-ac01-f62533fef4fc" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/caramel/models/dummy_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/caramel/models/dummy_model.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,7 +44,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/tomut/Documents/GitHub/caramel/pyzx"
+    "last_opened_file_path": "C:/Users/tomut/Documents/GitHub/ProjectBespoke"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -58,7 +61,7 @@
       <recent name="C:\Users\tomut\Documents\GitHub\caramel\caramel\models\layers" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.example_zx_workflow">
+  <component name="RunManager" selected="Python.example_mimic_heuristic">
     <configuration name="data_set_builder" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="caramel" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -144,10 +147,10 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.data_set_builder" />
+      <item itemvalue="Python.dual_data_set_builder" />
       <item itemvalue="Python.example_mimic_heuristic" />
       <item itemvalue="Python.example_zx_workflow" />
-      <item itemvalue="Python.dual_data_set_builder" />
-      <item itemvalue="Python.data_set_builder" />
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
