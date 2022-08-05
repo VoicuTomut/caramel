@@ -3,6 +3,11 @@ Interface between pyzx and caramel module.
 """
 import numpy as np
 
+import sys
+
+sys.path.append("..")
+from carame_pyzx_enhancements.extract_tensor import get_tensor_from_g
+
 
 class Network:
     def __init__(self, zx_graph):
@@ -44,7 +49,7 @@ class Network:
             node_collection[node] = {}
             node_collection[node]["id"] = node
             node_collection[node]["edges"] = {edge_translation[edge] for edge in zx_graph.incident_edges(node)}
-            node_collection[node]["tensor"] = get_tensor()
+            node_collection[node]["tensor"] = get_tensor(zx_graph, node)
 
         return node_collection
 
@@ -140,7 +145,7 @@ class Network:
                     abj_mat[i][i] = j
         return abj_mat
 
-    def coo_matrix(self, direct = False):
+    def coo_matrix(self, direct=False):
         """
 
         :param direct:  Bool if True the reverse edge will be added. The doubles will be added at the end.
@@ -168,10 +173,11 @@ class Network:
         return coo_mat
 
 
-def get_tensor():
+def get_tensor(pyzx_graph, v):
     """
     Get tensor from the zx circuit.
     Not implemented yet because it wasn't required.
     :return: tensor.
     """
-    return 0
+
+    return get_tensor_from_g(pyzx_graph, v)

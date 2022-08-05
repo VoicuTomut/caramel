@@ -76,3 +76,6 @@ for i in range(len(custom_order_result)):
     for j in range(len(custom_order_result)):
         s = s + (abs(custom_order_result[i][j] - simple_zx_result[i][j])) ** 2
 print("Difference between results :", s)
+
+
+

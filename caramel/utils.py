@@ -3,6 +3,9 @@ Useful functions.
 """
 
 
+########################################################################################
+# Some path conversions
+
 def contraction_moment_to_zx_contraction(contraction_moments, circuit_net):
     """
     Convert a contraction moment list to zx contraction path
@@ -50,6 +53,54 @@ def contraction_moment(opt_einsum_input, size_dic, contraction_path):
     return edge_moment
 
 
+def edge_path_to_opt_einsum_path(path, opt_einsum_input):
+    # give to each edge a moment(int) at witch it will be contracted.
+    edge_contraction = edge_contraction_path_to_dic(path)
+    path = sorted(path)
+    for moment, value in enumerate(path):
+        for key in edge_contraction.keys():
+            if edge_contraction[key] == value:
+                edge_contraction[key] == moment
+
+    edge_contraction = {k: v for k, v in sorted(edge_contraction.items(), key=lambda item: item[1])}
+
+    opt_einsum_contraction = []  # [(node1,node5), (node2,node3)...]
+    for edge in edge_contraction:
+
+        contracted_nodes = []
+        k = 0
+        # print("opt-einsum_inp:",opt_einsum_input)
+        for node_index, node in enumerate(opt_einsum_input):
+            # print("edge {}-{}".format(edge, node))
+            if edge in node:
+                contracted_nodes.append(node_index)
+                k = k + 1
+            if k == 2:
+                break
+
+        if k == 2:
+            new_node = opt_einsum_input[contracted_nodes[0]].symmetric_difference(opt_einsum_input[contracted_nodes[1]])
+            opt_einsum_contraction.append((contracted_nodes[0], contracted_nodes[1]))
+            opt_einsum_input.pop(contracted_nodes[0])
+            if contracted_nodes[0]<contracted_nodes[1]:
+                contracted_nodes[1] =contracted_nodes[1] -1
+            opt_einsum_input.pop(contracted_nodes[1])
+            opt_einsum_input.append(new_node)
+
+    return opt_einsum_contraction
+
+
+def edge_contraction_path_to_dic(path):
+    """
+    It creates a dictionary edge:{contraction moment number}
+    """
+    edge_contraction = {}
+    for edge, moment in enumerate(path):
+        edge_contraction[edge] = moment
+    return edge_contraction
+
+
+############################################################################
 def node_colour_contraction(data, x_poz=None):
     """
     Return a coloring for the nodes from  data_graph

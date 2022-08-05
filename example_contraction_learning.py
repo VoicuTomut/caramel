@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 import torch
-from caramel.models.circuits_to_dataset.dual_data_set_builder import CircuitDataset as DualCircuitDataset
-
+from caramel.models.circuits_to_dataset.g_data_set_builder import CircuitDataset as DualCircuitDataset
+from caramel.cost_function import cost_of_contraction
 from caramel.models.dummy_model import DummyModel
 
 # Device
@@ -28,16 +28,6 @@ print("\n-Data extracted!- \n\n")
 
 data = dataset[0]
 print(data)
-# color_map = node_colour_contraction(data, x_poz=2)
-# g = torch_geometric.utils.to_networkx(data, to_undirected=True)
-# nx.draw(g, with_labels=True, node_color=color_map)
-# plt.savefig("figures/dual_input_graph.png")
-# plt.close()
-
-# color_map = node_colour_contraction(data, x_poz=None)
-# nx.draw(g, with_labels=True, node_color=color_map)
-# plt.savefig("figures/dual_target_graph.png")
-# plt.close()
 
 
 # Model
@@ -54,8 +44,8 @@ prediction = model(data.x, data.edge_index, data.edge_attr)
 print("prediction:", prediction)
 
 
-def mimic_loss(prediction, target):
-    prediction = prediction.reshape(target.shape)
+def contraction_loss(predict, target):
+    prediction = predict.reshape(target.shape)
     # print(target)
     # print("max", max(target))
     max_t = max(target)
@@ -63,12 +53,12 @@ def mimic_loss(prediction, target):
     loss = torch.sum((prediction - target / max_t) ** 2)
     return loss
 
-
-loss = mimic_loss(prediction, data.y)
+print("target:", data.y)
+loss = contraction_loss(prediction, data.y)
 print("loss:", loss)
 
 # Training
-nr_epochs = 5
+nr_epochs = 1
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 loss_hist = []

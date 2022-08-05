@@ -5,8 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af01dded-c506-4926-ac01-f62533fef4fc" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/caramel/cost_function.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/caramel/models/circuits_to_dataset/enhance_data_set_builder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/caramel/models/circuits_to_dataset/g_data_set_builder.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example_contraction_learning.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/path_conversions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/caramel/models/dummy_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/caramel/models/dummy_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/caramel/interface_pyzx.py" beforeDir="false" afterPath="$PROJECT_DIR$/caramel/interface_pyzx.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/caramel/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/caramel/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example_mimic_heuristic.py" beforeDir="false" afterPath="$PROJECT_DIR$/example_mimic_heuristic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example_zx_workflow.py" beforeDir="false" afterPath="$PROJECT_DIR$/example_zx_workflow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/dummy_loss_history.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/dummy_loss_history.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/dummy_loss_history_cut.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/dummy_loss_history_cut.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,16 +54,16 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/tomut/Documents/GitHub/ProjectBespoke"
+    "last_opened_file_path": "C:/Users/tomut/Documents/GitHub/caramel"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\tomut\Documents\GitHub\caramel\pyzx" />
       <recent name="C:\Users\tomut\Documents\GitHub\caramel" />
+      <recent name="C:\Users\tomut\Documents\GitHub\caramel\caramel\models\circuits_to_dataset" />
+      <recent name="C:\Users\tomut\Documents\GitHub\caramel\pyzx" />
       <recent name="C:\Users\tomut\Documents\GitHub\caramel\circuit_dataset" />
       <recent name="C:\Users\tomut\Documents\GitHub\caramel\caramel\models" />
-      <recent name="C:\Users\tomut\Documents\GitHub\caramel\circuit_dataset\experiment_dataset\raw_dir" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\tomut\Documents\GitHub\caramel\zx_enhancement" />
@@ -61,7 +71,7 @@
       <recent name="C:\Users\tomut\Documents\GitHub\caramel\caramel\models\layers" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.example_mimic_heuristic">
+  <component name="RunManager" selected="Python.path_conversions">
     <configuration name="data_set_builder" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="caramel" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -116,7 +126,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\tomut\Documents\GitHub\caramel\example_mimic_heuristic.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/example_mimic_heuristic.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -146,10 +156,32 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="path_conversions" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="caramel" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\tomut\anaconda3\envs\caramel\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/path_conversions.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.data_set_builder" />
       <item itemvalue="Python.dual_data_set_builder" />
       <item itemvalue="Python.example_mimic_heuristic" />
+      <item itemvalue="Python.path_conversions" />
       <item itemvalue="Python.example_zx_workflow" />
     </list>
   </component>
