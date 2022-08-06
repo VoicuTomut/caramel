@@ -2,6 +2,7 @@
 Learning a contraction heuristic workflow example :
 """
 import matplotlib.pyplot as plt
+import numpy as np
 from tqdm import tqdm
 
 import torch
@@ -29,7 +30,6 @@ print("\n-Data extracted!- \n\n")
 data = dataset[0]
 print(data)
 
-
 # Model
 feature_size = dataset[0].x.shape[1]
 model = DummyModel(feature_size=feature_size)
@@ -42,23 +42,35 @@ data = dataset[0].to(device)
 
 prediction = model(data.x, data.edge_index, data.edge_attr)
 print("prediction:", prediction)
+print("prediction shape:", prediction.shape)
 
 
-def contraction_loss(predict, target):
-    prediction = predict.reshape(target.shape)
-    # print(target)
-    # print("max", max(target))
-    max_t = max(target)
-    # max_t = 1
-    loss = torch.sum((prediction - target / max_t) ** 2)
+
+
+def contraction_loss(predictions, graphs_info):
+    # path = predictions.reshape(predictions.shape[0])
+    # print("predictions", predictions)
+    # print("predictions shape", predictions.shape)
+    predictions = predictions.reshape((1, predictions.shape[0]))
+    contraction_cost_list = torch.tensor([[0.0]], dtype=torch.float32,requires_grad = True)
+    for predicted_path in predictions:
+        path = predicted_path
+        contraction_cost = cost_of_contraction(path, graphs_info, importance=[0, 0.1, 1])
+        contraction_cost_list = torch.cat([contraction_cost_list, torch.tensor([[contraction_cost]])], dim=1)
+    # print("contraction cost list", contraction_cost_list)
+    loss = torch.sum(contraction_cost_list)
+
     return loss
+
 
 print("target:", data.y)
 loss = contraction_loss(prediction, data.y)
 print("loss:", loss)
 
+
+print("###########Training##############")
 # Training
-nr_epochs = 1
+nr_epochs = 50
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
 loss_hist = []
@@ -74,7 +86,7 @@ for epoch in range(nr_epochs):  # loop over the dataset multiple times
 
         # forward + backward + optimize
         prediction = model(sample.x, sample.edge_index, sample.edge_attr)
-        loss = mimic_loss(prediction, data.y)
+        loss = contraction_loss(prediction, data.y)
         loss.backward()
         optimizer.step()
 
@@ -90,21 +102,21 @@ plt.plot(loss_hist)
 plt.xlabel(' epochs')
 plt.ylabel(' loss')
 plt.title('loss history')
-plt.savefig("figures/dummy_loss_history.png")
+plt.savefig("figures/loss_history.png")
 plt.show()
 plt.close()
 
-plt.plot(loss_hist[400:])
+plt.plot(loss_hist[0:])
 plt.xlabel(' epochs')
 plt.ylabel(' loss')
 plt.title('loss history cut ')
-plt.savefig("figures/dummy_loss_history_cut.png")
+plt.savefig("figures/loss_history_cut.png")
 plt.show()
 plt.close()
 
 # Model after training
 data = dataset[0].to(device)
 prediction = model(data.x, data.edge_index, data.edge_attr)
-print("prediction:", prediction*max(data.y))
-loss = mimic_loss(prediction, data.y)
+print("prediction:", prediction * max(data.y))
+loss = contraction_loss(prediction, data.y)
 print("loss:", loss)

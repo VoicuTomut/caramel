@@ -5,18 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af01dded-c506-4926-ac01-f62533fef4fc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/caramel/cost_function.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/caramel/models/circuits_to_dataset/enhance_data_set_builder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/caramel/models/circuits_to_dataset/g_data_set_builder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example_contraction_learning.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/path_conversions.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/figures/loss_history.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/figures/loss_history_cut.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target_values.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/caramel/interface_pyzx.py" beforeDir="false" afterPath="$PROJECT_DIR$/caramel/interface_pyzx.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/caramel/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/caramel/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example_mimic_heuristic.py" beforeDir="false" afterPath="$PROJECT_DIR$/example_mimic_heuristic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example_zx_workflow.py" beforeDir="false" afterPath="$PROJECT_DIR$/example_zx_workflow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/caramel/cost_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/caramel/cost_function.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/000_test_circuit.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/000_test_circuit.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_10_after_heavy.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_10_after_heavy.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_10_after_light.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_10_after_light.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_10_before.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_10_before.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_10_pyzx.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_10_pyzx.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_10_tpar.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_10_tpar.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_3_after_heavy.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_3_after_heavy.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_3_after_light.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_3_after_light.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_3_before.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_3_before.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_3_pyzx.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_3_pyzx.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_3_tpar.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_3_tpar.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_4_after_heavy.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_4_after_heavy.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_4_after_light.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_4_after_light.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_4_before.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_4_before.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_4_pyzx.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_4_pyzx.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_4_tpar.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_4_tpar.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_5_after_heavy.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_5_after_heavy.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_5_after_light.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_5_after_light.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_5_before.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_5_before.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_5_pyzx.pt" beforeDir="false" afterPath="$PROJECT_DIR$/circuit_dataset/dual_experiment_dataset/processed/tof_5_pyzx.pt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example_contraction_learning.py" beforeDir="false" afterPath="$PROJECT_DIR$/example_contraction_learning.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/000_test_circuit.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/000_test_circuit.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/figures/dummy_loss_history.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/dummy_loss_history.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figures/dummy_loss_history_cut.png" beforeDir="false" afterPath="$PROJECT_DIR$/figures/dummy_loss_history_cut.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +70,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/tomut/Documents/GitHub/caramel"
+    "last_opened_file_path": "C:/Users/tomut/Documents/GitHub/tensorcircuit"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -71,7 +87,7 @@
       <recent name="C:\Users\tomut\Documents\GitHub\caramel\caramel\models\layers" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.path_conversions">
+  <component name="RunManager" selected="Python.target_values">
     <configuration name="data_set_builder" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="caramel" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -106,6 +122,27 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/caramel/models/dual_data_set_builder.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="example_contraction_learning" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="caramel" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\tomut\anaconda3\envs\caramel\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/example_contraction_learning.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -177,11 +214,34 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="target_values" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <module name="caramel" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\tomut\anaconda3\envs\caramel\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/target_values.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.data_set_builder" />
       <item itemvalue="Python.dual_data_set_builder" />
       <item itemvalue="Python.example_mimic_heuristic" />
       <item itemvalue="Python.path_conversions" />
+      <item itemvalue="Python.example_contraction_learning" />
+      <item itemvalue="Python.target_values" />
       <item itemvalue="Python.example_zx_workflow" />
     </list>
   </component>
