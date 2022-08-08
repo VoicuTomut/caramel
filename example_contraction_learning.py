@@ -1,6 +1,7 @@
 """
 Learning a contraction heuristic workflow example :
 """
+import random
 import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
@@ -8,7 +9,11 @@ from tqdm import tqdm
 import torch
 from caramel.models.circuits_to_dataset.enhance_data_set_builder import CircuitDataset as DualCircuitDataset
 from caramel.cost_function import cost_of_contraction
-from caramel.models.model_01 import Model_01
+from caramel.models.model_01 import Model01
+from target_values import reference_value
+
+# Seed
+random.seed(1997)
 
 # Device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -31,11 +36,18 @@ data = dataset[0]
 print(data)
 
 # Model
-importance = [1, 0.5, 0.5]
+importance = [1, 0.0, 0.5]
 feature_size = dataset[0].x.shape[1]
-model = Model_01(feature_size=feature_size)
+model_params = {"embedding_size": 500,
+                "n_heads": 4,
+                "dropout_rate": 0.9,
+                "edge_dim": 2,
+                "model_layers": 4,
+                }
+model = Model01(feature_size=feature_size, model_params=model_params)
 print("model:", model)
 print("Number of parameters: ", sum(p.numel() for p in model.parameters()))
+reference_value(importance, tf, folder_path="circuit_dataset/zx_circuits/")
 
 # untrained model
 model = model.to(device)
@@ -62,14 +74,10 @@ def contraction_loss(predictions, graphs_info):
     return ls
 
 
-print("target:", data.y)
-loss = contraction_loss(prediction, data.y)
-print("loss:", loss)
-
 print("###########Training##############")
 # Training
-nr_epochs = 10
-lr=0.0005
+nr_epochs = 100
+lr = 0.0005
 
 optimizer = torch.optim.Adam(model.parameters(), lr)
 
@@ -117,6 +125,6 @@ plt.close()
 # Model after training
 data = dataset[0].to(device)
 prediction = model(data.x, data.edge_index, data.edge_attr)
-print("prediction:", prediction )
+print("prediction:", prediction)
 loss = contraction_loss(prediction, data.y)
 print("loss:", loss)

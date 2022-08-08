@@ -130,7 +130,7 @@ class CircuitDataset(Dataset):
         #           or 'i' where 'i' is the position in the output_order
         # node1 rank -> tensor 1 size
         # node2 rank -> tensor 2 size
-        # contraction_moment
+
 
         all_edge_feats = []
         for edge in quantum_net.size_dict:
@@ -158,7 +158,7 @@ class CircuitDataset(Dataset):
             edge_feats.append(order)
             edge_feats.append(node1r)
             edge_feats.append(node2r)
-            edge_feats.append(1)#(len(quantum_net.opt_einsum_input) - 1)
+            #edge_feats.append(1)#(len(quantum_net.opt_einsum_input) - 1)
             all_edge_feats.append(edge_feats)
 
         all_edge_feats = np.array(all_edge_feats)
