@@ -76,8 +76,8 @@ def contraction_loss(predictions, graphs_info):
 
 print("###########Training##############")
 # Training
-nr_epochs = 100
-lr = 0.0005
+nr_epochs = 500
+lr = 0.00015
 
 optimizer = torch.optim.Adam(model.parameters(), lr)
 

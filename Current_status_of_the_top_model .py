@@ -1,5 +1,5 @@
 """
-Curent status of the top model
+Current status of the top model
 """
 
 import random
@@ -132,7 +132,7 @@ def circuit_histogram(circuit_name, contraction_costs, reference_cost):
 
 
 # Kind of a random heuristic:
-nr_paths_samples = 100
+nr_paths_samples = 500
 importance_weights = [1, 0.5, 0.0]
 
 contraction_costs_all = [0 for i in range(nr_paths_samples)]
