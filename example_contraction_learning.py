@@ -6,9 +6,9 @@ import numpy as np
 from tqdm import tqdm
 
 import torch
-from caramel.models.circuits_to_dataset.g_data_set_builder import CircuitDataset as DualCircuitDataset
+from caramel.models.circuits_to_dataset.enhance_data_set_builder import CircuitDataset as DualCircuitDataset
 from caramel.cost_function import cost_of_contraction
-from caramel.models.dummy_model import DummyModel
+from caramel.models.model_01 import Model_01
 
 # Device
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -31,8 +31,9 @@ data = dataset[0]
 print(data)
 
 # Model
+importance = [1, 0.5, 0.5]
 feature_size = dataset[0].x.shape[1]
-model = DummyModel(feature_size=feature_size)
+model = Model_01(feature_size=feature_size)
 print("model:", model)
 print("Number of parameters: ", sum(p.numel() for p in model.parameters()))
 
@@ -45,33 +46,32 @@ print("prediction:", prediction)
 print("prediction shape:", prediction.shape)
 
 
-
-
 def contraction_loss(predictions, graphs_info):
     # path = predictions.reshape(predictions.shape[0])
     # print("predictions", predictions)
     # print("predictions shape", predictions.shape)
     predictions = predictions.reshape((1, predictions.shape[0]))
-    contraction_cost_list = torch.tensor([[0.0]], dtype=torch.float32,requires_grad = True)
+    contraction_cost_list = torch.tensor([[0.0]], dtype=torch.float32, requires_grad=True)
     for predicted_path in predictions:
         path = predicted_path
-        contraction_cost = cost_of_contraction(path, graphs_info, importance=[0, 0.1, 1])
+        contraction_cost = cost_of_contraction(path, graphs_info, importance=importance)
         contraction_cost_list = torch.cat([contraction_cost_list, torch.tensor([[contraction_cost]])], dim=1)
     # print("contraction cost list", contraction_cost_list)
-    loss = torch.sum(contraction_cost_list)
+    ls = torch.sum(contraction_cost_list)
 
-    return loss
+    return ls
 
 
 print("target:", data.y)
 loss = contraction_loss(prediction, data.y)
 print("loss:", loss)
 
-
 print("###########Training##############")
 # Training
-nr_epochs = 50
-optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+nr_epochs = 10
+lr=0.0005
+
+optimizer = torch.optim.Adam(model.parameters(), lr)
 
 loss_hist = []
 for epoch in range(nr_epochs):  # loop over the dataset multiple times
@@ -117,6 +117,6 @@ plt.close()
 # Model after training
 data = dataset[0].to(device)
 prediction = model(data.x, data.edge_index, data.edge_attr)
-print("prediction:", prediction * max(data.y))
+print("prediction:", prediction )
 loss = contraction_loss(prediction, data.y)
 print("loss:", loss)

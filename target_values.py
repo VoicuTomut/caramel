@@ -22,7 +22,7 @@ tf = ['000_test_circuit.qasm', 'tof_10_after_heavy', 'tof_10_after_light', 'tof_
       'tof_5_before', 'tof_5_pyzx.qc', ]
 
 folder_path = "circuit_dataset/zx_circuits/"
-importance = [0, 0.1, 1]
+importance = [1, 0.5, 0.5]
 
 loss = 0
 for circuit in tf:
@@ -48,7 +48,7 @@ for circuit in tf:
                                      size_dict=quantum_net.size_dict,
                                      path=contraction_path)
 
-    cost = importance[0] * tree.total_flops() + importance[1] * np.log2(tree.contraction_width() + 1.0) + importance[
+    cost = importance[0] *np.log10(float(tree.total_flops())+0.1)  + importance[1] * np.log2(tree.contraction_width() + 1.0) + importance[
         2] * np.log2(float(tree.total_write() + 0.1))
     loss = loss+cost
 

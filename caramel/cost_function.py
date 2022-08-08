@@ -32,7 +32,7 @@ def cost_of_contraction(path, quantum_net, importance=[1, 1, 1]):
         " log2[WRITE]: ",
         "%.3f" % np.log2(float(tree.total_write()+0.1)),  # total amount of created  memory
     )
-    cost = importance[0] * tree.total_flops() + importance[1] *np.log2(tree.contraction_width()+1.0) + importance[
+    cost = importance[0] * np.log10(float(tree.total_flops())+0.1) + importance[1] *np.log2(tree.contraction_width()+1.0) + importance[
         2] *np.log2(float(tree.total_write()+0.1))
 
     return cost

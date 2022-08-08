@@ -154,7 +154,7 @@ class CircuitDataset(Dataset):
 
         for j in range(0, len(dual_abj)):
             for k in range(j + 1, len(dual_abj)):
-                if dual_abj[k][l] == 1:
+                if dual_abj[k][j] == 1:
                     # coo_mat.append([j, k])
                     # coo_mat.append([k, j])
                     coo_mat[0].append(j)

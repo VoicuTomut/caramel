@@ -75,33 +75,49 @@ class CircuitDataset(Dataset):
             quantum_net = Network(zx_graph)
 
             nod_feats = self._get_node_feats(quantum_net)
-            edge_index, tensor_size_list = self._get_connectivity(quantum_net)
-            edge_feats = self._get_edge_feats(edge_index, tensor_size_list)
+            edge_index = self._get_connectivity(quantum_net)
+            edge_feats = self._get_edge_feats(edge_index, quantum_net)
 
-            contraction_suggestion = self._get_additional_info(quantum_net)
+            contraction_evaluation_info = self._get_additional_info(quantum_net)
 
             data = Data(x=nod_feats,
                         edge_index=edge_index,
                         edge_attr=edge_feats,
-                        y=contraction_suggestion,
+                        y=contraction_evaluation_info,
                         )
 
             file_name = raw_path.split("\\")[-1].split(".")[0]
             torch.save(data, os.path.join(self.processed_dir, f'{file_name}.pt'))
 
-    def _get_edge_feats(self, edg_index, tensor_size_list):
+    def _get_edge_feats(self, edg_index, quantum_net):
         """
         Return a 2d tensor  of shape [number of nodes, node features size]
         :param edg_index:  pytorch tensor. COO matrix
         :return: pytorch tensor
         """
-        # the edge futures keep the size of the tensor
+        # node id
+        # node size
         # edges  from the initial circuit have a common node.
-
+        # print("here:")
         all_node_feats = []
-        for edge in range(len(edg_index[0])):
-            f1 = tensor_size_list[edge]
-            all_node_feats.append([f1])
+        for edge_id in range(len(edg_index[0])):
+            node_feats = []
+            e0 = int(edg_index[0][edge_id])
+            e1 = int(edg_index[1][edge_id])
+
+            for ind, node in enumerate(quantum_net.opt_einsum_input):
+                # print("e0:{};e1:{}".format(e0,e1))
+                # print("node:",node)
+                node_list = [int(k) for k in node]
+                if e0 in node and e1 in node_list:
+                    node_id = ind
+                    node_size = 2 ** len(node_list)
+                    node_feats.append(node_id)
+                    node_feats.append(node_size)
+                    # print("node_f:", node_feats)
+                    break
+
+            all_node_feats.append(node_feats)
         return torch.tensor(all_node_feats, dtype=torch.float)
 
     def _get_node_feats(self, quantum_net):
@@ -110,20 +126,15 @@ class CircuitDataset(Dataset):
         :param quantum_net:  a Network class object.
         :return: pytorch tensor
         """
-
         # order  -> -1 for edges that are not and edges
         #           or 'i' where 'i' is the position in the output_order
-        # degree -> number of nodes that connects in the circuit graph
-        # contraction_cost -> cost to contract the edge
-        #
+        # node1 rank -> tensor 1 size
+        # node2 rank -> tensor 2 size
         # contraction_moment
-        # contraction_moments for  k previous heuristics may be added in the future
 
         all_edge_feats = []
         for edge in quantum_net.size_dict:
             edge_feats = []
-
-            degree = quantum_net.size_dict[edge]
 
             order = -1
             for output_order in range(len(quantum_net.opt_einsum_output)):
@@ -131,11 +142,23 @@ class CircuitDataset(Dataset):
                 if edge == ed:
                     order = output_order
 
-            edge_feats.append(degree)
+            node1r = 1
+            node2r = 1
+            k = 0
+            for index, node in enumerate(quantum_net.opt_einsum_input):
+                if edge in node:
+                    if k == 0:
+                        node1r = len(node)
+                        k = k + 1
+                    else:
+                        node2r = len(node)
+            node1r = 2 ** node1r
+            node2r = 2 ** node2r
+
             edge_feats.append(order)
-
-
-            edge_feats.append(len(quantum_net.opt_einsum_input) - 1)
+            edge_feats.append(node1r)
+            edge_feats.append(node2r)
+            edge_feats.append(1)#(len(quantum_net.opt_einsum_input) - 1)
             all_edge_feats.append(edge_feats)
 
         all_edge_feats = np.array(all_edge_feats)
@@ -148,36 +171,25 @@ class CircuitDataset(Dataset):
         :return:pytorch tensor
         """
         coo_mat = [[], []]
-        # coo_mat = []
         nr_nodes = len(quantum_net.size_dict.keys())
         dual_abj = np.zeros((nr_nodes, nr_nodes))
 
-        node_sizes = np.zeros((nr_nodes, nr_nodes)) # keeps the size of tensor inside eof the node
         for k in quantum_net.size_dict.keys():
             for nodes in quantum_net.opt_einsum_input:
                 if k in nodes:
-                    for l in nodes:
-                        dual_abj[k][l] = 1
-                        node_sizes[k][l] = 2**len(nodes)
+                    for j in nodes:
+                        dual_abj[k][j] = 1
 
-        coo_mat_tensor_size = []
         for j in range(0, len(dual_abj)):
             for k in range(j + 1, len(dual_abj)):
-                if dual_abj[k][l] == 1:
-                    # coo_mat.append([j, k])
-                    # coo_mat.append([k, j])
+                if dual_abj[j][k] == 1:
+                    # j->k
                     coo_mat[0].append(j)
                     coo_mat[1].append(k)
+                    # k->j
                     coo_mat[0].append(k)
                     coo_mat[1].append(j)
-
-                    ##
-                    coo_mat_tensor_size.append(node_sizes[k][l])
-                    coo_mat_tensor_size.append(node_sizes[k][l])
-
-
-
-        return torch.tensor(coo_mat), coo_mat_tensor_size
+        return torch.tensor(coo_mat)
 
     def _get_additional_info(self, quantum_net):
         """
@@ -185,15 +197,11 @@ class CircuitDataset(Dataset):
         :param quantum_net: a Network class object
         :return: pytorch tensor
         """
-        optimizer = MansikkaOptimizer()
-        contraction_order = optimizer(quantum_net.opt_einsum_input,
-                                      quantum_net.opt_einsum_output,
-                                      quantum_net.size_dict)
-        cm = contraction_moment(quantum_net.opt_einsum_input,
-                                quantum_net.size_dict,
-                                contraction_order)
+        q_net = {'opt_einsum_input': quantum_net.opt_einsum_input,
+                 'opt_einsum_output': quantum_net.opt_einsum_output,
+                 'size_dict': quantum_net.size_dict}
 
-        return torch.tensor(cm)
+        return q_net
 
     def len(self):
         return len(self.processed_file_names)
