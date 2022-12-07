@@ -6,8 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="af01dded-c506-4926-ac01-f62533fef4fc" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/ Curent_status_of_the_top_model .ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/ Curent_status_of_the_top_model .ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ Current_status_of_the_top_model .ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/ Current_status_of_the_top_model .ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example_contraction_learning.py" beforeDir="false" afterPath="$PROJECT_DIR$/example_contraction_learning.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ppt.py" beforeDir="false" afterPath="$PROJECT_DIR$/Curent_status_of_the_top_model .py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,16 +39,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/tomut/Documents/GitHub/caramel/ppt.py"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/tomut/Documents/GitHub/caramel/ppt.py&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\tomut\Documents\GitHub\caramel\caramel\models" />
@@ -236,11 +236,11 @@
       <item itemvalue="Python.Current_status_of_the_top_model " />
       <item itemvalue="Python.data_set_builder" />
       <item itemvalue="Python.dual_data_set_builder" />
-      <item itemvalue="Python.example_mimic_heuristic" />
-      <item itemvalue="Python.path_conversions" />
       <item itemvalue="Python.example_contraction_learning" />
-      <item itemvalue="Python.target_values" />
+      <item itemvalue="Python.example_mimic_heuristic" />
       <item itemvalue="Python.example_zx_workflow" />
+      <item itemvalue="Python.path_conversions" />
+      <item itemvalue="Python.target_values" />
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
