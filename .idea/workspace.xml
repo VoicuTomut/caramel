@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="af01dded-c506-4926-ac01-f62533fef4fc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/ Curent_status_of_the_top_model .ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/ Curent_status_of_the_top_model .ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ Current_status_of_the_top_model .ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/ Current_status_of_the_top_model .ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ppt.py" beforeDir="false" afterPath="$PROJECT_DIR$/Curent_status_of_the_top_model .py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/ Current_status_of_the_top_model -checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/ Current_status_of_the_top_model -checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyzx/circuit/qasmparser.py" beforeDir="false" afterPath="$PROJECT_DIR$/pyzx/circuit/qasmparser.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

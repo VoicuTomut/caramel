@@ -210,7 +210,9 @@ class QASMParser(object):
                 if i == -1 or j == -1:
                     raise TypeError("Invalid specification {}".format(name))
                 vals = name[i + 1 : j].split(",")
+                # print("vals:",vals)
                 phases = [self.parse_phase_arg(val) for val in vals]
+                # print("phases:",phases)
                 if name.startswith("u2"):
                     if len(phases) != 2:
                         raise TypeError("Invalid specification {}".format(name))
@@ -244,14 +246,22 @@ class QASMParser(object):
         return gates
 
     def parse_phase_arg(self, val):
+        # print("1", val)
         try:
             phase = float(val) / math.pi
+            # print("phase",phase)
         except ValueError:
+            # print("2", val)
+
             if val.find("pi") == -1:
                 raise TypeError("Invalid specification {}".format(name))
             try:
+                # print("3", val)
                 val = val.replace("pi", "")
+                # print("4", val)
                 val = val.replace("*", "")
+                if val=="-":
+                    val="-1"
                 if val.find("/") != -1:
                     n, d = val.split("/", 1)
                     n = n.strip()
@@ -270,6 +280,7 @@ class QASMParser(object):
                     else:
                         phase = float(val)
             except:
+                # print("val2",val)
                 raise TypeError("Invalid specification {}".format(val))
         phase = Fraction(phase).limit_denominator(100000000)
         return phase
